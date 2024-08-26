@@ -271,7 +271,7 @@ Here is where you can start creating your application. Let's blink try and blink
 
 - in `main.c` add the function call `LED_PIN_Toggle();` and also this `crude_delay_ms()` function before `main()`
 
-```C
+```c
 int crude_ms_delay(int ms){
     int count = 0;
     unsigned int delay_count = ms * 12000;

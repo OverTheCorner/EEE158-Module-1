@@ -4,7 +4,7 @@
 
 You can obtain the PIC32CM LS00 Curiosity Nano+ Touch Evaluation Kit `Primary User Guide` on the Official Microchip Web Page. 
 
-[PIC32CM LS00 Curiosity Nano + Touch Evaluation Kit | Microchip technology](https://www.microchip.com/en-us/development-tool/EV41C56A)
+[PIC32CM LS00 Curiosity Nano + Touch Evaluation Kit Microchip technology](<https://www.microchip.com/en-us/development-tool/EV41C56A>)
 
 ![alt text](PIC32CMLS00CuriosityNanoDocumentation/images/Overview.png)
 

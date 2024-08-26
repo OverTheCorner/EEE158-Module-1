@@ -67,29 +67,22 @@ Proceed to input the following code into `main.c`
  * 
  */
 
-int crude_ms_delay(int ms){
-    int count = 0;
-    unsigned int delay_count = ms * 240;
-    
-    while(count < delay_count){
-        asm("nop");
-        count = count + 1;
-    }
-    return 0;
+int crude_delay(int count){
+    for(int i; i < count; i++);
 }
 
 int main() {
      //Set the Data Direction for PA15 as Output
-    PORT_SEC_REGS->GROUP[0].PORT_DIRSET = (1 << 15);
+    PORT_REGS->GROUP[0].PORT_DIRSET = (1 << 15);
     
     //Set the Initial Output Value for PA15 as HIGH
-    PORT_SEC_REGS->GROUP[0].PORT_OUTSET = (1 << 15);
+    PORT_REGS->GROUP[0].PORT_OUTSET = (1 << 15);
     
     
     while(1){
         //Toggle the Output of PA15
-        PORT_SEC_REGS->GROUP[0].PORT_OUTTGL = (1 << 15);
-        crude_ms_delay(1000);
+        PORT_REGS->GROUP[0].PORT_OUTTGL = (1 << 15);
+        crude_delay(100);
     }
     return (EXIT_SUCCESS);
 }
@@ -108,7 +101,7 @@ If it builds, we are now ready to try and debug your application.
 
 Include a breakpoint in your program by clicking on the line number on the left side of the code editor
 
-![alt text](MPLABFirstSteps/images/BMBreakpointHIt.png)
+![alt text](MPLABFirstSteps/images/BMBreakpointHit.png)
 
 Click on the `Debug Main Project` button on the ribbon to begin Simulator Debugging.
 
@@ -137,9 +130,9 @@ Press the `Step Over` Button and you should go into the next line of the Applica
 
 ![alt text](MPLABFirstSteps/images/StepOver.png)
 
-Now press the `Step Into` Button and you should go into the `crude_ms_delay` method
+Now press the `Step Into` Button and you should go into the `crude_delay` method
 
-![alt text](MPLABFirstSteps/images/StepInto.png)
+![alt text](MPLABFirstSteps/images/StepINto.png)
 
 Press the `Continue` button and after a while, you should hit the breakpoint again
 
@@ -156,6 +149,22 @@ Let's try and open up the `Peripherals` Memory View.
 ![alt text](MPLABFirstSteps/images/PeripheralMemoryView.png)
 
 This allows us to directly check the contents of the registers and is useful for debugging.
+
+#### Logic Analyzer
+
+You can open up the logic analyzer by going to 'Window' -> 'Simulator' -> 'Logic Analyzer'
+
+![alt text](MPLABFirstSteps/images/OPenLA.png)
+
+You can watch over a pin's state by adding it. Press the `Settings` icon on the logic analyzer window and add `PA15` to `Selected Pins`
+
+![alt text](MPLABFirstSteps/images/LASettings.png)
+
+![alt text](MPLABFirstSteps/images/AddPin.png)
+
+You can now use the Logic Analyzer to view how `PA15` toggles between 0V and 3.3V
+
+![alt text](MPLABFirstSteps/images/ToggleLA.png)
 
 #### Hardware Debugging
 

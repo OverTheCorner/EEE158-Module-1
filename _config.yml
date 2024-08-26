@@ -6,4 +6,4 @@ relative_links:
 include:
   - index.md
   - MPLABFirstSteps/MPLAB_First_Steps.md
-  - PIC32CMLS00CuriosityNanoDocumentation/PIC32_nano_docs.md
+  - PIC32_nano_docs.md

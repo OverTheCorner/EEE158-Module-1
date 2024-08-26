@@ -7,3 +7,4 @@ include:
   - index.md
   - MPLAB_First_Steps.md
   - PIC32_nano_docs.md
+theme: jekyll-theme-midnight

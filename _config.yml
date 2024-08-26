@@ -1,0 +1,9 @@
+plugins:
+  - jekyll-relative-links
+relative_links:
+  enabled: true
+  collections: true
+include:
+  - index.md
+  - MPLAB_First_Steps.md
+  - PIC32_nano_docs.md

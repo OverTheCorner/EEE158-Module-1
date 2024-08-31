@@ -132,7 +132,7 @@ Press the `Step Over` Button and you should go into the next line of the Applica
 
 Now press the `Step Into` Button and you should go into the `crude_delay` method
 
-![alt text](MPLABFirstSteps/images/StepINto.png)
+![alt text](MPLABFirstSteps/images/StepInto.png)
 
 Press the `Continue` button and after a while, you should hit the breakpoint again
 

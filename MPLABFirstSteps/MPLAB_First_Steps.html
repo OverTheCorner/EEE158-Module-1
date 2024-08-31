@@ -375,11 +375,11 @@ code {
 <ul>
 <li>Create a New Project</li>
 </ul>
-<p><img src="./images/NewProject.png" alt="alt text"></p>
+<p><img src="./MPLABFirstSteps/images/NewProject.png" alt="alt text"></p>
 <ul>
 <li>Choose <code>Application Project(s)</code> then click <code>Next &gt;</code></li>
 </ul>
-<p><img src="./images/ApplicationProject.png" alt="alt text"></p>
+<p><img src="./MPLABFirstSteps/images/ApplicationProject.png" alt="alt text"></p>
 <ul>
 <li>
 <p>Choose the following for <code>2. Select Device</code></p>
@@ -390,7 +390,7 @@ code {
 <p><em>note: you can always change the tool later, will be useful once we move from using the simulator to actual hardware</em></p>
 </li>
 </ul>
-<p><img src="./images/DeviceSelection.png" alt="alt text"></p>
+<p><img src="./MPLABFirstSteps/images/DeviceSelection.png" alt="alt text"></p>
 <ul>
 <li>Choose a installed XC32 Compiler
 <ul>
@@ -398,23 +398,23 @@ code {
 </ul>
 </li>
 </ul>
-<p><img src="./images/CompilerSelection.png" alt="alt text"></p>
+<p><img src="./MPLABFirstSteps/images/CompilerSelection.png" alt="alt text"></p>
 <ul>
 <li>Select where to save your Project on your local machine then click <code>Finish</code></li>
 </ul>
 <p><em>note: We suggest creating a new folder within another folder when you create a project as another folder will be generated in the same directory as the path you choose here (i.e. if you plan on storing all your Projects in a folder called <code>MyProjects</code>, create a folder <code>MyProjects/MyFirstProject</code> and choose <code>MyFirstProject</code> as the place to save)</em></p>
-<p><img src="images/SaveBareMetal.png" alt="alt text"></p>
+<p><img src="MPLABFirstSteps/images/SaveBareMetal.png" alt="alt text"></p>
 <p><em>note: Unlick the `Open MCC on Finish option as we won't be using that for now</em></p>
 <ul>
 <li>Your First Project should now initialize</li>
 </ul>
-<p><img src="images/BMInit.png" alt="alt text"></p>
+<p><img src="MPLABFirstSteps/images/BMInit.png" alt="alt text"></p>
 <p>Let's now proceed to creating a <code>main.c</code> file so we can start coding our application.</p>
 <h2 id="guided-exercise-%22blinky%22">Guided Exercise: &quot;Blinky!&quot;</h2>
 <h3 id="blinky">Blinky!</h3>
 <p>Create a <code>main.c</code> file. Right click on the <code>Source Files</code> of the Project Tab then click <code>New</code> and <code>C Main File</code></p>
-<p><img src="images/createmain.png" alt="alt text"></p>
-<p><img src="images/mainc.png" alt="alt text"></p>
+<p><img src="MPLABFirstSteps/images/createmain.png" alt="alt text"></p>
+<p><img src="MPLABFirstSteps/images/mainc.png" alt="alt text"></p>
 <p>Proceed to input the following code into <code>main.c</code></p>
 <pre class="hljs"><code><div><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span>
 <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdlib.h&gt;</span></span>
@@ -423,45 +423,38 @@ code {
  * 
  */</span>
 
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">crude_ms_delay</span><span class="hljs-params">(<span class="hljs-keyword">int</span> ms)</span></span>{
-    <span class="hljs-keyword">int</span> count = <span class="hljs-number">0</span>;
-    <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> delay_count = ms * <span class="hljs-number">240</span>;
-    
-    <span class="hljs-keyword">while</span>(count &lt; delay_count){
-        <span class="hljs-keyword">asm</span>(<span class="hljs-string">"nop"</span>);
-        count = count + <span class="hljs-number">1</span>;
-    }
-    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">crude_delay</span><span class="hljs-params">(<span class="hljs-keyword">int</span> count)</span></span>{
+    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i; i &lt; count; i++);
 }
 
 <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
      <span class="hljs-comment">//Set the Data Direction for PA15 as Output</span>
-    PORT_SEC_REGS-&gt;GROUP[<span class="hljs-number">0</span>].PORT_DIRSET = (<span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">15</span>);
+    PORT_REGS-&gt;GROUP[<span class="hljs-number">0</span>].PORT_DIRSET = (<span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">15</span>);
     
     <span class="hljs-comment">//Set the Initial Output Value for PA15 as HIGH</span>
-    PORT_SEC_REGS-&gt;GROUP[<span class="hljs-number">0</span>].PORT_OUTSET = (<span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">15</span>);
+    PORT_REGS-&gt;GROUP[<span class="hljs-number">0</span>].PORT_OUTSET = (<span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">15</span>);
     
     
     <span class="hljs-keyword">while</span>(<span class="hljs-number">1</span>){
         <span class="hljs-comment">//Toggle the Output of PA15</span>
-        PORT_SEC_REGS-&gt;GROUP[<span class="hljs-number">0</span>].PORT_OUTTGL = (<span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">15</span>);
-        crude_ms_delay(<span class="hljs-number">1000</span>);
+        PORT_REGS-&gt;GROUP[<span class="hljs-number">0</span>].PORT_OUTTGL = (<span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">15</span>);
+        crude_delay(<span class="hljs-number">100</span>);
     }
     <span class="hljs-keyword">return</span> (EXIT_SUCCESS);
 }
 </div></code></pre>
 <p>Let us first try Building our Application. Press the <code>Build</code> Icon to compile your project. It's the one that looks like a hammer
-<img src="images/BuildIcon.png" alt="alt text"></p>
+<img src="MPLABFirstSteps/images/BuildIcon.png" alt="alt text"></p>
 <p>If it builds, we are now ready to try and debug your application.</p>
 <h4 id="simulator-debugging">Simulator Debugging</h4>
 <p><em>note: the simulator has limited functionality in simulating the PORT peripheral</em></p>
-<p><img src="images/Partial Support.png" alt="alt text"></p>
+<p><img src="MPLABFirstSteps/images/Partial Support.png" alt="alt text"></p>
 <p>Include a breakpoint in your program by clicking on the line number on the left side of the code editor</p>
-<p><img src="images/BMBreakpointHIt.png" alt="alt text"></p>
+<p><img src="MPLABFirstSteps/images/BMBreakpointHit.png" alt="alt text"></p>
 <p>Click on the <code>Debug Main Project</code> button on the ribbon to begin Simulator Debugging.</p>
 <h5 id="application-execution-control">Application Execution Control</h5>
 <p>These buttons on the ribbon will allow you to control the debugging of your application.</p>
-<p><img src="images/DebuggerButtons.png" alt="alt text"></p>
+<p><img src="MPLABFirstSteps/images/DebuggerButtons.png" alt="alt text"></p>
 <ul>
 <li><code>Finish Debugger Session</code> - End Debugging</li>
 <li><code>Pause</code> - Pause Application Execution</li>
@@ -475,19 +468,27 @@ code {
 <li><code>Focus Cursor at PC</code></li>
 </ul>
 <p>Your debugger should stop at the break point we set earlier</p>
-<p><img src="images/BMBreakpoint.png" alt="alt text"></p>
+<p><img src="MPLABFirstSteps/images/BMBreakpoint.png" alt="alt text"></p>
 <p>Press the <code>Step Over</code> Button and you should go into the next line of the Application code</p>
-<p><img src="images/StepOver.png" alt="alt text"></p>
-<p>Now press the <code>Step Into</code> Button and you should go into the <code>crude_ms_delay</code> method</p>
-<p><img src="images/StepInto.png" alt="alt text"></p>
+<p><img src="MPLABFirstSteps/images/StepOver.png" alt="alt text"></p>
+<p>Now press the <code>Step Into</code> Button and you should go into the <code>crude_delay</code> method</p>
+<p><img src="MPLABFirstSteps/images/StepINto.png" alt="alt text"></p>
 <p>Press the <code>Continue</code> button and after a while, you should hit the breakpoint again</p>
-<p><img src="images/BMBreakpoint.png" alt="alt text"></p>
+<p><img src="MPLABFirstSteps/images/BMBreakpoint.png" alt="alt text"></p>
 <h4 id="target-memory-views">Target Memory Views</h4>
 <p>Target memory views allows us to look at the contents of the memory of our device under test (DUT). You can open this by navigating in the ribbon. <code>Window</code> -&gt; <code>Target Memory Views</code></p>
-<p><img src="images/TargetMemoryViews.png" alt="alt text"></p>
+<p><img src="MPLABFirstSteps/images/TargetMemoryViews.png" alt="alt text"></p>
 <p>Let's try and open up the <code>Peripherals</code> Memory View.</p>
-<p><img src="images/PeripheralMemoryView.png" alt="alt text"></p>
+<p><img src="MPLABFirstSteps/images/PeripheralMemoryView.png" alt="alt text"></p>
 <p>This allows us to directly check the contents of the registers and is useful for debugging.</p>
+<h4 id="logic-analyzer">Logic Analyzer</h4>
+<p>You can open up the logic analyzer by going to 'Window' -&gt; 'Simulator' -&gt; 'Logic Analyzer'</p>
+<p><img src="MPLABFirstSteps/images/OPenLA.png" alt="alt text"></p>
+<p>You can watch over a pin's state by adding it. Press the <code>Settings</code> icon on the logic analyzer window and add <code>PA15</code> to <code>Selected Pins</code></p>
+<p><img src="MPLABFirstSteps/images/LASettings.png" alt="alt text"></p>
+<p><img src="MPLABFirstSteps/images/AddPin.png" alt="alt text"></p>
+<p>You can now use the Logic Analyzer to view how <code>PA15</code> toggles between 0V and 3.3V</p>
+<p><img src="MPLABFirstSteps/images/ToggleLA.png" alt="alt text"></p>
 <h4 id="hardware-debugging">Hardware Debugging</h4>
 <p>Hardware debugging is similar to Simulator debugging and you can perform any of the Application Execution Controls and Memory View functionality.</p>
 <p>To change the <code>Tool</code> from Simulator to you on-board debugger</p>
@@ -495,11 +496,11 @@ code {
 <li>Plug in your Curiosity Nano board to your machine</li>
 <li>Click on <code>Project Properties</code></li>
 </ul>
-<p><img src="images/ProjectProperties.png" alt="alt text"></p>
+<p><img src="MPLABFirstSteps/images/ProjectProperties.png" alt="alt text"></p>
 <ul>
 <li>Change the <code>Connected Hardware Tool</code> to you on-board debugger</li>
 </ul>
-<p><img src="images/ChangeTool.png" alt="alt text"></p>
+<p><img src="MPLABFirstSteps/images/ChangeTool.png" alt="alt text"></p>
 <ul>
 <li>When you perform debugging now, the program will first upload to your microcontroller and you can proceed with debugging.</li>
 </ul>
@@ -508,11 +509,11 @@ code {
 <ul>
 <li>Create a New Project</li>
 </ul>
-<p><img src="./images/NewProject.png" alt="alt text"></p>
+<p><img src="./MPLABFirstSteps/images/NewProject.png" alt="alt text"></p>
 <ul>
 <li>Choose <code>Application Project(s)</code> then click <code>Next &gt;</code></li>
 </ul>
-<p><img src="./images/ApplicationProject.png" alt="alt text"></p>
+<p><img src="./MPLABFirstSteps/images/ApplicationProject.png" alt="alt text"></p>
 <ul>
 <li>
 <p>Choose the following for <code>2. Select Device</code></p>
@@ -523,7 +524,7 @@ code {
 <p><em>note: you can always change the tool later, will be useful once we move from using the simulator to actual hardware</em></p>
 </li>
 </ul>
-<p><img src="./images/DeviceSelection.png" alt="alt text"></p>
+<p><img src="./MPLABFirstSteps/images/DeviceSelection.png" alt="alt text"></p>
 <ul>
 <li>Choose a installed XC32 Compiler
 <ul>
@@ -531,25 +532,25 @@ code {
 </ul>
 </li>
 </ul>
-<p><img src="./images/CompilerSelection.png" alt="alt text"></p>
+<p><img src="./MPLABFirstSteps/images/CompilerSelection.png" alt="alt text"></p>
 <ul>
 <li>Select where to save your Project on your local machine then click <code>Finish</code></li>
 </ul>
 <p><em>note: We suggest creating a new folder within another folder when you create a project as another folder will be generated in the same directory as the path you choose here (i.e. if you plan on storing all your Projects in a folder called <code>MyProjects</code>, create a folder <code>MyProjects/MyFirstProject</code> and choose <code>MyFirstProject</code> as the place to save)</em></p>
-<p><img src="images/SaveProject.png" alt="alt text"></p>
+<p><img src="MPLABFirstSteps/images/SaveProject.png" alt="alt text"></p>
 <ul>
 <li>Your First Project should now initialize</li>
 </ul>
-<p><img src="images/FirstProjectInit.png" alt="alt text"></p>
+<p><img src="MPLABFirstSteps/images/FirstProjectInit.png" alt="alt text"></p>
 <ul>
 <li>We now proceed to setting up the MPLAB Code Configurator, It will either open up automatically or you can open it by clicking on the <code>MCC</code> icon on the top ribbon</li>
 </ul>
-<p><img src="images/Ribbon.png" alt="alt text"></p>
+<p><img src="MPLABFirstSteps/images/Ribbon.png" alt="alt text"></p>
 <h3 id="mplab-code-configurator">MPLAB Code Configurator</h3>
 <ul>
 <li>Download content for MPLAB Code Configurator (MCC)</li>
 </ul>
-<p><img src="images/MCCDownload.png" alt="alt text"></p>
+<p><img src="MPLABFirstSteps/images/MCCDownload.png" alt="alt text"></p>
 <ul>
 <li>On your first time opening, MCC will automatically ask you to download some files.</li>
 </ul>
@@ -557,31 +558,31 @@ code {
 <ul>
 <li>Chip Support Package: proceed to also include <code>csp_apps_pic32cm_le_ls</code> from under <code>Harmony 3 - Chip Support Packages</code></li>
 </ul>
-<p><img src="images/chip_support_package.png" alt="alt text"></p>
+<p><img src="MPLABFirstSteps/images/chip_support_package.png" alt="alt text"></p>
 <ul>
 <li>Core Apps Package: proceed to also include <code>core_apps_pic32cm_le_ls</code> from under <code>Harmony 3 - Core</code></li>
 </ul>
-<p><img src="images/CoreApps.png" alt="alt text"></p>
+<p><img src="MPLABFirstSteps/images/CoreApps.png" alt="alt text"></p>
 <p><em>note: you can also add these packages later by opening up the <code>Content Manager</code> (CM button beside MCC) if you don't install them now</em></p>
 <h4 id="mcc-harmony-windows">MCC Harmony Windows</h4>
 <p>We now proceed with using MCC to easily create some configurations for our Microcontroller</p>
 <p>Open up <code>MCC</code> and navigate to <code>Pin Configuration</code> either through the ribbon or through the Project Graph</p>
-<p><img src="images/MCCWindows.png" alt="alt text"></p>
-<p><img src="images/ProjectGraphPinConfig.png" alt="alt text"></p>
+<p><img src="MPLABFirstSteps/images/MCCWindows.png" alt="alt text"></p>
+<p><img src="MPLABFirstSteps/images/ProjectGraphPinConfig.png" alt="alt text"></p>
 <p>We can use a GUI to set up the pins of our Microcontroller. Proceed to set up PA15 as Output Pin as shown. Take note of the <code>Security Mode</code> being set as <code>NON-SECURE</code> as well.</p>
-<p><img src="images/LED_pin_setup.png" alt="alt text"></p>
-<p><img src="images/PinDiagram.png" alt="alt text"></p>
+<p><img src="MPLABFirstSteps/images/LED_pin_setup.png" alt="alt text"></p>
+<p><img src="MPLABFirstSteps/images/PinDiagram.png" alt="alt text"></p>
 <ul>
 <li>Click on Generate to generate your configuration code</li>
 </ul>
-<p><img src="images/Generate.png" alt="alt text"></p>
+<p><img src="MPLABFirstSteps/images/Generate.png" alt="alt text"></p>
 <p>You should now see in your Project folder more files, these were auto generated by MCC. The interesting one here is the header file <code>plib_port.h</code></p>
-<p><img src="images/plib_port_h.png" alt="alt text"></p>
+<p><img src="MPLABFirstSteps/images/plib_port_h.png" alt="alt text"></p>
 <p>You can use these newly declared definition in you code to control the Pin.</p>
 <ul>
 <li>Go to <code>main.c</code> under <code>Source Files</code></li>
 </ul>
-<p><img src="images/main_c.png" alt="alt text"></p>
+<p><img src="MPLABFirstSteps/images/main_c.png" alt="alt text"></p>
 <p>Here is where you can start creating your application. Let's blink try and blink an LED by switching a pin between HIGH and LOW.</p>
 <h2 id="guided-exercise-%22mcc-blinky%22">Guided Exercise: &quot;MCC-Blinky!&quot;</h2>
 <h3 id="blinky">Blinky!</h3>
@@ -619,7 +620,7 @@ code {
 }
 </div></code></pre>
 <p>Let us first try Building our Application. Press the <code>Build</code> Icon to compile your project. It's the one that looks like a hammer
-<img src="images/BuildIcon.png" alt="alt text"></p>
+<img src="MPLABFirstSteps/images/BuildIcon.png" alt="alt text"></p>
 <p>If it builds, we are now ready to try and debug your application.</p>
 
 </body>

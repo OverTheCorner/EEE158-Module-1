@@ -12,6 +12,14 @@ Please download a copy of the `Primary User Guide` and use it as reference.
 
 ![alt text](PIC32CMLS00CuriosityNanoDocumentation/images/primary_user_guide.png)
 
+Please also proceed to the Official page for the `PIC32CM5164LS00048` Microcontroller and grab a copy of the 'PIC32CM LE00/LS00/LS60 Family Data Sheet`
+
+[PIC32CM5164LS00048 Page](https://www.microchip.com/en-us/product/PIC32CM5164LS00048#document-table)
+
+![alt text](MPLABFirstSteps/images/MCUPage.png)
+
+![alt text](MPLABFirstSteps/images/MCUDocsDatasheet.png)
+
 ## Notes on Hardware
 
 - You will need a USB-A to USB-Micro data cable to connect your board to a PC

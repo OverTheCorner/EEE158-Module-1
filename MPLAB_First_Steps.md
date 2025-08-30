@@ -60,32 +60,59 @@ Create a `main.c` file. Right click on the `Source Files` of the Project Tab the
 Proceed to input the following code into `main.c`
 
 ```c
-#include <stdio.h>
-#include <stdlib.h>
+// All register names are defined here.
 #include <xc.h>
+
+// Naive software delay; approx. 1us / cycle
+void crude_delay_ms(int ms)
+{
+	while (ms > 0) {
+		for (int i = 0; i < 1000; ++i) {
+			asm("nop");
+		}
+		--ms;
+	}
+}
+
 /*
- * 
+ * NOTE: Most of my students seem to recall the member-access operator when
+ *       using the term 'class' rather than 'struct'.
+ *
+ * If 'a' is the object itself, or a C++ rvalue:
+ * 	a.b()
+ *
+ * If 'a' is a pointer:
+ * 	(*a).b()
+ * 	- or -
+ * 	a->b()
  */
 
-int crude_delay(int count){
-    for(int i; i < count; i++);
+int main(void)
+{
+	/*
+	 * Configure PA15 (Port Group A, Bit 15)
+	 *
+	 * 'PORT_SEC_REGS' --> All port I/O registers
+	 * 'GROUP'	   --> Array of port groups (0 = 'A', 1 = 'B', etc.)
+	 * 'PORT_???'	   --> Register named '???'
+	 */
+
+	// NOTE: Some review of C/C++ bitwise operations may be in order.
+	PORT_SEC_REGS->GROUP[0].PORT_OUT &= ~(1 << 15);
+	PORT_SEC_REGS->GROUP[0].PORT_DIR |=  (1 << 15);
+	
+	// Nowhere to return to, hence the infinite loop
+	for (;;) {
+		crude_delay_ms(200);
+
+		// NOTE: A '1' in an XOR mask causes a toggle.
+		PORT_SEC_REGS->GROUP[0].PORT_OUT ^= (1 << 15);
+	}
+	
+	// Not expected to be run at all
+	return 1;
 }
 
-int main() {
-     //Set the Data Direction for PA15 as Output
-    PORT_REGS->GROUP[0].PORT_DIRSET = (1 << 15);
-    
-    //Set the Initial Output Value for PA15 as HIGH
-    PORT_REGS->GROUP[0].PORT_OUTSET = (1 << 15);
-    
-    
-    while(1){
-        //Toggle the Output of PA15
-        PORT_REGS->GROUP[0].PORT_OUTTGL = (1 << 15);
-        crude_delay(100);
-    }
-    return (EXIT_SUCCESS);
-}
 ```
 
 Let us first try Building our Application. Press the `Build` Icon to compile your project. It's the one that looks like a hammer
